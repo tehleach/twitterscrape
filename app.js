@@ -49,7 +49,10 @@ function clearFile() {
 // we will append data to the file in batches to avoid running out of memory trying to store it all locally
 function appendToFile(data) {
     try {
-        const parser = new Parser()
+        const fields = [ 'created_at', 'text' ]
+        const opts = { fields }
+        const parser = new Parser(opts)
+        // const parser = new Parser() // use this instead of above line to get all fields
         const csv = parser.parse(data);
         fs.appendFile('tweets.csv', csv, () => {})
     } catch (err) {
@@ -121,6 +124,10 @@ function getTweets(searchterm, date){
         getNextSet(maxId).then(() => {
             console.log('finished')
         })
+    }).catch((err) => {
+        console.log('failed!')
+        console.log(err)
+        return
     })
  
 }
